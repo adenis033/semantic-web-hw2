@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:book="http://www.semweb.com/books#"
+         xmlns:user="http://www.semweb.com/users#">
+
+    <rdf:Description rdf:about="http://www.semweb.com/books#Beginner">
+        <rdfs:label>Beginner</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.semweb.com/books#Intermediate">
+        <rdfs:label>Intermediate</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.semweb.com/books#Advanced">
+        <rdfs:label>Advanced</rdfs:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.semweb.com/books#ScienceFiction">
+        <rdfs:label>Science Fiction</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.semweb.com/books#Fantasy">
+        <rdfs:label>Fantasy</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.semweb.com/books#Mystery">
+        <rdfs:label>Mystery</rdfs:label>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.semweb.com/books#Murder">
+        <rdfs:label>Murder</rdfs:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.semweb.com/books#Dune">
+        <rdfs:label>Dune</rdfs:label>
+        <book:hasGenre rdf:resource="http://www.semweb.com/books#ScienceFiction"/>
+        <book:hasGenre rdf:resource="http://www.semweb.com/books#Fantasy"/>
+        <book:hasReadingLevel rdf:resource="http://www.semweb.com/books#Advanced"/>
+        <book:hasAuthor>Frank Herbert</book:hasAuthor>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.semweb.com/books#TheSilentPatient">
+        <rdfs:label>The Silent Patient</rdfs:label>
+        <book:hasGenre rdf:resource="http://www.semweb.com/books#Mystery"/>
+        <book:hasGenre rdf:resource="http://www.semweb.com/books#Murder"/>
+        <book:hasReadingLevel rdf:resource="http://www.semweb.com/books#Intermediate"/>
+        <book:hasAuthor>Alex Michaelides</book:hasAuthor>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.semweb.com/books#HungerGames">
+        <rdfs:label>Hunger Games</rdfs:label>
+        <book:hasGenre rdf:resource="http://www.semweb.com/books#ScienceFiction"/>
+        <book:hasGenre rdf:resource="http://www.semweb.com/books#Fantasy"/>
+        <book:hasReadingLevel rdf:resource="http://www.semweb.com/books#Beginner"/>
+        <book:hasAuthor>Suzanne Collins</book:hasAuthor>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.semweb.com/users#Alice">
+        <rdfs:label>Alice</rdfs:label>
+        <user:hasReadingLevel rdf:resource="http://www.semweb.com/books#Intermediate"/>
+        <user:preferredGenre rdf:resource="http://www.semweb.com/books#ScienceFiction"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.semweb.com/users#Bob">
+        <rdfs:label>Bob</rdfs:label>
+        <user:hasReadingLevel rdf:resource="http://www.semweb.com/books#Beginner"/>
+        <user:preferredGenre rdf:resource="http://www.semweb.com/books#Mystery"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.semweb.com/users#Alice">
+        <user:recommendedBook rdf:resource="http://www.semweb.com/books#TheSilentPatient"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.semweb.com/users#Bob">
+        <user:recommendedBook rdf:resource="http://www.semweb.com/books#HungerGames"/>
+    </rdf:Description>
+
+</rdf:RDF>

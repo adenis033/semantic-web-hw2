@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload RDF</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1100px; margin: 50px auto; background: #f9f9f9; }
+        h1 { color: #333; }
+        .upload-form { background: white; padding: 20px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        input[type="file"] { margin: 10px 0; }
+        button { background: #4a90d9; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; }
+        button:hover { background: #357abd; }
+        .error { color: red; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        th { background: #4a90d9; color: white; padding: 10px; text-align: left; }
+        td { padding: 8px 10px; border-bottom: 1px solid #eee; }
+        tr:hover td { background: #f5f5f5; }
+        .back { display: inline-block; margin-bottom: 20px; color: #4a90d9; text-decoration: none; }
+        .graph-container { margin-top: 30px; border: 1px solid #ddd; border-radius: 8px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; }
+        svg { display: block; }
+        .legend { margin-top: 15px; padding: 10px 20px; display: flex; gap: 20px; flex-wrap: wrap; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+        .legend-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+        .tip { font-size: 12px; color: #888; margin-top: 8px; }
+    </style>
+</head>
+<body>
+<a class="back" href="/">← Back to Home</a>
+<h1>📊 Upload & Visualize RDF Graph</h1>
+
+<div class="upload-form">
+    <form action="/upload-rdf" method="post" enctype="multipart/form-data">
+        <label>Select an RDF/XML file:</label><br>
+        <input type="file" name="file" accept=".rdf,.xml" required/><br>
+        <button type="submit">Upload & Visualize</button>
+    </form>
+</div>
+
+<p class="error" th:if="${error}" th:text="${error}"></p>
+
+<div th:if="${triples}">
+    <h2>RDF Triples</h2>
+    <table>
+        <tr>
+            <th>Subject</th>
+            <th>Predicate</th>
+            <th>Object</th>
+        </tr>
+        <tr th:each="triple : ${triples}">
+            <td th:text="${triple.subject}"></td>
+            <td th:text="${triple.predicate}"></td>
+            <td th:text="${triple.object}"></td>
+        </tr>
+    </table>
+
+    <h2>Graph Visualization</h2>
+    <p class="tip">💡 Tip: You can drag nodes around to rearrange the graph!</p>
+    <div id="legend" class="legend"></div>
+    <div class="graph-container">
+        <svg id="rdf-graph" width="1060" height="750"></svg>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const triples = /*[[${triples}]]*/ [];
+
+    // ── 1. Build node type map from rdf:type triples ──────────────────────────
+    const typeMap = new Map();   // nodeId → type label
+    triples.forEach(t => {
+        if (t.predicate === "type") {
+            typeMap.set(t.subject, t.object);
+        }
+    });
+
+    // ── 2. Collect unique types and assign colors dynamically ─────────────────
+    const COLOR_PALETTE = [
+        "#4a90d9", "#e67e22", "#27ae60", "#8e44ad",
+        "#e74c3c", "#16a085", "#f39c12", "#2c3e50"
+    ];
+    const typeColors = new Map();
+    let colorIndex = 0;
+
+    function getTypeColor(type) {
+        if (!typeColors.has(type)) {
+            typeColors.set(type, COLOR_PALETTE[colorIndex % COLOR_PALETTE.length]);
+            colorIndex++;
+        }
+        return typeColors.get(type);
+    }
+
+    function getNodeColor(id) {
+        if (typeMap.has(id)) return getTypeColor(typeMap.get(id));
+        // fallback: color by whether it looks like a literal
+        if (id.startsWith("http") || id.match(/^[A-Z]/)) {
+            return getTypeColor("Resource");
+        }
+        return getTypeColor("Literal");
+    }
+
+    // ── 3. Count connections per node to size them ────────────────────────────
+    const connectionCount = new Map();
+    triples.forEach(t => {
+        if (t.predicate === "label" || t.predicate === "type") return;
+        connectionCount.set(t.subject, (connectionCount.get(t.subject) || 0) + 1);
+        connectionCount.set(t.object, (connectionCount.get(t.object) || 0) + 1);
+    });
+
+    function getRadius(id) {
+        const count = connectionCount.get(id) || 0;
+        return Math.max(22, Math.min(45, 22 + count * 3));
+    }
+
+    // ── 4. Build nodes and links (skip label and type triples from graph) ─────
+    const nodeMap = new Map();
+    const links = [];
+
+    triples.forEach(t => {
+        if (t.predicate === "label" || t.predicate === "type") return;
+        if (!nodeMap.has(t.subject)) nodeMap.set(t.subject, { id: t.subject });
+        if (!nodeMap.has(t.object))  nodeMap.set(t.object,  { id: t.object  });
+        links.push({ source: t.subject, target: t.object, label: t.predicate });
+    });
+
+    const nodes = Array.from(nodeMap.values());
+
+    // ── 5. Pre-position nodes by type group so layout starts spread out ───────
+    const typeGroups = new Map();
+    nodes.forEach(n => {
+        const type = typeMap.get(n.id) || "Resource";
+        if (!typeGroups.has(type)) typeGroups.set(type, []);
+        typeGroups.get(type).push(n);
+    });
+
+    const width = 1060, height = 750;
+    const groupList = Array.from(typeGroups.entries());
+    const totalGroups = groupList.length;
+
+    groupList.forEach(([type, groupNodes], gi) => {
+        const cx = (width / (totalGroups + 1)) * (gi + 1);
+        groupNodes.forEach((n, i) => {
+            n.x = cx + (Math.random() - 0.5) * 80;
+            n.y = (height / (groupNodes.length + 1)) * (i + 1) + (Math.random() - 0.5) * 30;
+        });
+    });
+
+    // ── 6. Build legend dynamically ───────────────────────────────────────────
+    // trigger color assignment for all types first
+    nodes.forEach(n => getNodeColor(n.id));
+
+    const legendEl = document.getElementById("legend");
+    typeColors.forEach((color, type) => {
+        const item = document.createElement("div");
+        item.className = "legend-item";
+        item.innerHTML = `<div class="legend-dot" style="background:${color}"></div> ${type}`;
+        legendEl.appendChild(item);
+    });
+
+    // ── 7. Draw the graph ─────────────────────────────────────────────────────
+    const svg = d3.select("#rdf-graph").attr("width", width).attr("height", height);
+
+    svg.append("defs").append("marker")
+        .attr("id", "arrow")
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 10).attr("refY", 0)
+        .attr("markerWidth", 7).attr("markerHeight", 7)
+        .attr("orient", "auto")
+        .append("path").attr("d", "M0,-5L10,0L0,5").attr("fill", "#aaa");
+
+    const simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(links)
+            .id(d => d.id)
+            .distance(200)
+            .strength(0.3))
+        .force("charge", d3.forceManyBody()
+            .strength(-1000))
+        .force("center", d3.forceCenter(width / 2, height / 2).strength(0.05))
+        .force("collision", d3.forceCollide()
+            .radius(d => getRadius(d.id) + 20)
+            .strength(1.0)
+            .iterations(10))
+        .alphaDecay(0.02);
+
+    const linkEl = svg.append("g")
+        .selectAll("line").data(links).join("line")
+        .attr("stroke", "#ccc")
+        .attr("stroke-width", 1.5)
+        .attr("marker-end", "url(#arrow)");
+
+    const linkLabelEl = svg.append("g")
+        .selectAll("text").data(links).join("text")
+        .attr("text-anchor", "middle")
+        .attr("font-size", "9px")
+        .attr("fill", "#555")
+        .attr("paint-order", "stroke")
+        .attr("stroke", "white")
+        .attr("stroke-width", "3px")
+        .text(d => d.label);
+
+    const nodeEl = svg.append("g")
+        .selectAll("g").data(nodes).join("g")
+        .call(d3.drag()
+            .on("start", (event, d) => {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x; d.fy = d.y;
+            })
+            .on("drag", (event, d) => { d.fx = event.x; d.fy = event.y; })
+            .on("end", (event, d) => {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null; d.fy = null;
+            }));
+
+    // shadow
+    nodeEl.append("circle")
+        .attr("r", d => getRadius(d.id) + 3)
+        .attr("fill", "rgba(0,0,0,0.07)")
+        .attr("transform", "translate(3,3)");
+
+    nodeEl.append("circle")
+        .attr("r", d => getRadius(d.id))
+        .attr("fill", d => getNodeColor(d.id))
+        .attr("stroke", "white")
+        .attr("stroke-width", 2.5);
+
+    nodeEl.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dy", "0.35em")
+        .attr("fill", "white")
+        .attr("font-size", "10px")
+        .attr("font-weight", "bold")
+        .attr("pointer-events", "none")
+        .text(d => d.id.length > 13 ? d.id.substring(0, 12) + "…" : d.id);
+
+    // tooltip on hover
+    nodeEl.append("title").text(d => d.id);
+
+    simulation.on("tick", () => {
+        nodes.forEach(d => {
+            const r = getRadius(d.id) + 5;
+            d.x = Math.max(r, Math.min(width - r, d.x));
+            d.y = Math.max(r, Math.min(height - r, d.y));
+        });
+
+        linkEl
+            .attr("x1", d => d.source.x).attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+
+        linkLabelEl
+            .attr("x", d => (d.source.x + d.target.x) / 2)
+            .attr("y", d => (d.source.y + d.target.y) / 2 - 6);
+
+        nodeEl.attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+    /*]]>*/
+</script>
+</body>
+</html>
