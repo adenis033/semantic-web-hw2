@@ -1,0 +1,408 @@
+<?xml version="1.0"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.semweb.com/books#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     ontologyIRI="http://www.semweb.com/books#">
+    <Prefix name="" IRI="http://www.semhttp://www.semweb.com/books#anticweb.org/axdenis03/ontologies/2026/4/untitled-ontology-3/"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Declaration>
+        <Class IRI="Advanced"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="Beginner"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="Book"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="Fantasy"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="Genre"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="Intermediate"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="Murder"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="Mystery"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="ReadingLevel"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="ScienceFiction"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="User"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="hasGenre"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="hasReadingLevel"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="preferredGenre"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="recommendedBook"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="hasAuthor"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="hasName"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="hasTitle"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="AdvancedLevel"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="Alice"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="BeginnerLevel"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="Bob"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="Books"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="Dune"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="FantasyGenre"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="Genres"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="HungerGames"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="IntermediateLevel"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="MurderGenre"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="MysteryGenre"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="Reading_Levels"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="ScienceFictionGenre"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="TheSilentPatient"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="Users"/>
+    </Declaration>
+    <SubClassOf>
+        <Class IRI="Advanced"/>
+        <Class IRI="ReadingLevel"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="Beginner"/>
+        <Class IRI="ReadingLevel"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="Fantasy"/>
+        <Class IRI="Genre"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="Intermediate"/>
+        <Class IRI="ReadingLevel"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="Murder"/>
+        <Class IRI="Genre"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="Mystery"/>
+        <Class IRI="Genre"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="ScienceFiction"/>
+        <Class IRI="Genre"/>
+    </SubClassOf>
+    <DisjointClasses>
+        <Class IRI="Advanced"/>
+        <Class IRI="Beginner"/>
+        <Class IRI="Intermediate"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="Book"/>
+        <Class IRI="Genre"/>
+        <Class IRI="ReadingLevel"/>
+        <Class IRI="User"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="Fantasy"/>
+        <Class IRI="Murder"/>
+        <Class IRI="Mystery"/>
+        <Class IRI="ScienceFiction"/>
+    </DisjointClasses>
+    <ClassAssertion>
+        <Class IRI="Advanced"/>
+        <NamedIndividual IRI="AdvancedLevel"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="User"/>
+        <NamedIndividual IRI="Alice"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="Beginner"/>
+        <NamedIndividual IRI="BeginnerLevel"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="User"/>
+        <NamedIndividual IRI="Bob"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="Book"/>
+        <NamedIndividual IRI="Dune"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="Fantasy"/>
+        <NamedIndividual IRI="FantasyGenre"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="Book"/>
+        <NamedIndividual IRI="HungerGames"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="Intermediate"/>
+        <NamedIndividual IRI="IntermediateLevel"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="Murder"/>
+        <NamedIndividual IRI="MurderGenre"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="Mystery"/>
+        <NamedIndividual IRI="MysteryGenre"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="ScienceFiction"/>
+        <NamedIndividual IRI="ScienceFictionGenre"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="Book"/>
+        <NamedIndividual IRI="TheSilentPatient"/>
+    </ClassAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="preferredGenre"/>
+        <NamedIndividual IRI="Alice"/>
+        <NamedIndividual IRI="ScienceFictionGenre"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="recommendedBook"/>
+        <NamedIndividual IRI="Alice"/>
+        <NamedIndividual IRI="TheSilentPatient"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="preferredGenre"/>
+        <NamedIndividual IRI="Bob"/>
+        <NamedIndividual IRI="MysteryGenre"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="recommendedBook"/>
+        <NamedIndividual IRI="Bob"/>
+        <NamedIndividual IRI="HungerGames"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="hasGenre"/>
+        <NamedIndividual IRI="Dune"/>
+        <NamedIndividual IRI="FantasyGenre"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="hasGenre"/>
+        <NamedIndividual IRI="Dune"/>
+        <NamedIndividual IRI="ScienceFictionGenre"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="hasReadingLevel"/>
+        <NamedIndividual IRI="Dune"/>
+        <NamedIndividual IRI="AdvancedLevel"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="hasGenre"/>
+        <NamedIndividual IRI="HungerGames"/>
+        <NamedIndividual IRI="FantasyGenre"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="hasGenre"/>
+        <NamedIndividual IRI="HungerGames"/>
+        <NamedIndividual IRI="ScienceFictionGenre"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="hasReadingLevel"/>
+        <NamedIndividual IRI="HungerGames"/>
+        <NamedIndividual IRI="BeginnerLevel"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="hasGenre"/>
+        <NamedIndividual IRI="TheSilentPatient"/>
+        <NamedIndividual IRI="MurderGenre"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="hasGenre"/>
+        <NamedIndividual IRI="TheSilentPatient"/>
+        <NamedIndividual IRI="MysteryGenre"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="hasReadingLevel"/>
+        <NamedIndividual IRI="TheSilentPatient"/>
+        <NamedIndividual IRI="IntermediateLevel"/>
+    </ObjectPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="hasName"/>
+        <NamedIndividual IRI="Alice"/>
+        <Literal>Alice</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="hasName"/>
+        <NamedIndividual IRI="Bob"/>
+        <Literal>Bob</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="hasAuthor"/>
+        <NamedIndividual IRI="Dune"/>
+        <Literal>Frank Herbert</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="hasTitle"/>
+        <NamedIndividual IRI="Dune"/>
+        <Literal>Dune</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="hasAuthor"/>
+        <NamedIndividual IRI="HungerGames"/>
+        <Literal>Suzanne Collins</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="hasTitle"/>
+        <NamedIndividual IRI="HungerGames"/>
+        <Literal>Hunger Games</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="hasAuthor"/>
+        <NamedIndividual IRI="TheSilentPatient"/>
+        <Literal>Alex Michaelides</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="hasTitle"/>
+        <NamedIndividual IRI="TheSilentPatient"/>
+        <Literal>The Silent Patient</Literal>
+    </DataPropertyAssertion>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="hasGenre"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="hasReadingLevel"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="preferredGenre"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="recommendedBook"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="hasGenre"/>
+        <Class IRI="Book"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="hasReadingLevel"/>
+        <Class IRI="Book"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="hasReadingLevel"/>
+        <Class IRI="User"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="preferredGenre"/>
+        <Class IRI="User"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="recommendedBook"/>
+        <Class IRI="User"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="hasGenre"/>
+        <Class IRI="Genre"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="hasReadingLevel"/>
+        <Class IRI="ReadingLevel"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="preferredGenre"/>
+        <Class IRI="Genre"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="recommendedBook"/>
+        <Class IRI="Book"/>
+    </ObjectPropertyRange>
+    <SubDataPropertyOf>
+        <DataProperty IRI="hasAuthor"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="hasName"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="hasTitle"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <DataPropertyDomain>
+        <DataProperty IRI="hasAuthor"/>
+        <Class IRI="Book"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="hasName"/>
+        <Class IRI="User"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="hasTitle"/>
+        <Class IRI="Book"/>
+    </DataPropertyDomain>
+    <DataPropertyRange>
+        <DataProperty IRI="hasAuthor"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="hasName"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="hasTitle"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi -->
+

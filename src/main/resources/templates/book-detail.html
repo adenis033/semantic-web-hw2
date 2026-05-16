@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Form</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 700px; margin: 50px auto; background: #f9f9f9; }
+        .back { display: inline-block; margin-bottom: 20px; color: #4a90d9; text-decoration: none; }
+        .card { background: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        h1 { color: #333; margin-top: 0; }
+        .field { margin-bottom: 18px; }
+        .field label { font-weight: bold; color: #555; display: block; margin-bottom: 6px; }
+        input[type="text"], select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; }
+        .checkbox-group label { font-weight: normal; display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        button { background: #4a90d9; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; }
+        button:hover { background: #357abd; }
+        .error { color: red; margin-bottom: 15px; }
+        .hint { font-size: 12px; color: #888; margin-top: 4px; }
+    </style>
+</head>
+<body>
+<a class="back" href="/books">← Back to Books</a>
+<div class="card">
+    <h1 th:text="${book != null} ? ' Edit Book' : '➕ Add New Book'">Book Form</h1>
+
+    <p class="error" th:if="${error}" th:text="${error}"></p>
+
+    <!-- ADD FORM -->
+    <form th:if="${book == null}" action="/books/add" method="post">
+        <div class="field">
+            <label>Book ID (no spaces)</label>
+            <input type="text" name="id" placeholder="e.g. HarryPotter" required/>
+            <p class="hint">This is used as the RDF identifier. No spaces or special characters.</p>
+        </div>
+        <div class="field">
+            <label>Title</label>
+            <input type="text" name="title" placeholder="e.g. Harry Potter" required/>
+        </div>
+        <div class="field">
+            <label>Author</label>
+            <input type="text" name="author" placeholder="e.g. J.K. Rowling" required/>
+        </div>
+        <div class="field">
+            <label>Reading Level</label>
+            <select name="readingLevel">
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Genres</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="genres" value="ScienceFiction"/> Science Fiction</label>
+                <label><input type="checkbox" name="genres" value="Fantasy"/> Fantasy</label>
+                <label><input type="checkbox" name="genres" value="Mystery"/> Mystery</label>
+                <label><input type="checkbox" name="genres" value="Murder"/> Murder</label>
+                <label><input type="checkbox" name="genres" value="Romance"/> Romance</label>
+                <label><input type="checkbox" name="genres" value="Horror"/> Horror</label>
+            </div>
+        </div>
+        <button type="submit">➕ Add Book</button>
+    </form>
+
+    <!-- EDIT FORM -->
+    <form th:if="${book != null}" th:action="@{/books/edit/{id}(id=${book.id})}" method="post">
+        <div class="field">
+            <label>Title</label>
+            <input type="text" name="title" th:value="${book.title}" required/>
+        </div>
+        <div class="field">
+            <label>Author</label>
+            <input type="text" name="author" th:value="${book.author}" required/>
+        </div>
+        <div class="field">
+            <label>Reading Level</label>
+            <select name="readingLevel">
+                <option value="Beginner" th:selected="${book.readingLevel == 'Beginner'}">Beginner</option>
+                <option value="Intermediate" th:selected="${book.readingLevel == 'Intermediate'}">Intermediate</option>
+                <option value="Advanced" th:selected="${book.readingLevel == 'Advanced'}">Advanced</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Genres</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="genres" value="ScienceFiction"
+                              th:checked="${#strings.contains(book.genres, 'ScienceFiction')}"/> Science Fiction</label>
+                <label><input type="checkbox" name="genres" value="Fantasy"
+                              th:checked="${#strings.contains(book.genres, 'Fantasy')}"/> Fantasy</label>
+                <label><input type="checkbox" name="genres" value="Mystery"
+                              th:checked="${#strings.contains(book.genres, 'Mystery')}"/> Mystery</label>
+                <label><input type="checkbox" name="genres" value="Murder"
+                              th:checked="${#strings.contains(book.genres, 'Murder')}"/> Murder</label>
+                <label><input type="checkbox" name="genres" value="Romance"
+                              th:checked="${#strings.contains(book.genres, 'Romance')}"/> Romance</label>
+                <label><input type="checkbox" name="genres" value="Horror"
+                              th:checked="${#strings.contains(book.genres, 'Horror')}"/> Horror</label>
+            </div>
+        </div>
+        <button type="submit">Save Changes</button>
+    </form>
+</div>
+</body>
+</html>

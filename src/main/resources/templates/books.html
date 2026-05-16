@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Books</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; max-width: 1000px; margin: 50px auto; background: #f9f9f9; }
+        h1 { color: #333; }
+        .back { display: inline-block; margin-bottom: 20px; color: #4a90d9; text-decoration: none; }
+        .add-btn { display: inline-block; margin-bottom: 20px; margin-left: 20px; background: #27ae60; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; }
+        .add-btn:hover { background: #219a52; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        th { background: #4a90d9; color: white; padding: 12px; text-align: left; }
+        td { padding: 10px 12px; border-bottom: 1px solid #eee; }
+        tr:hover td { background: #f5f5f5; }
+        .actions a { margin-right: 10px; text-decoration: none; color: #4a90d9; }
+        .actions a.edit { color: #e67e22; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 11px; color: white; margin: 2px; }
+        .badge-genre { background: #27ae60; }
+        .badge-level { background: #8e44ad; }
+    </style>
+</head>
+<body>
+<a class="back" href="/">← Back to Home</a>
+<a class="add-btn" href="/books/add">➕ Add New Book</a>
+<h1>📖 All Books</h1>
+
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Reading Level</th>
+        <th>Genres</th>
+        <th>Actions</th>
+    </tr>
+    <tr th:each="book : ${books}">
+        <td>
+            <a th:href="@{/books/{id}(id=${book.id})}" th:text="${book.title}" style="color:#4a90d9; text-decoration:none;"></a>
+        </td>
+        <td th:text="${book.author}"></td>
+        <td>
+            <span class="badge badge-level" th:text="${book.readingLevel}"></span>
+        </td>
+        <td>
+                <span th:each="genre : ${#strings.arraySplit(book.genres, ',')}"
+                      class="badge badge-genre"
+                      th:text="${#strings.trim(genre)}"></span>
+        </td>
+        <td class="actions">
+            <a th:href="@{/books/{id}(id=${book.id})}">View</a>
+            <a class="edit" th:href="@{/books/edit/{id}(id=${book.id})}">Edit</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
