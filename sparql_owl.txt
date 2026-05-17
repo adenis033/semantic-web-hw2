@@ -1,0 +1,84 @@
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl:  <http://www.w3.org/2002/07/owl#>
+PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>
+PREFIX book: <http://www.semweb.com/books#/>
+
+# Query 1: List all books with their authors and reading levels
+SELECT ?title ?author ?readingLevel
+WHERE {
+  ?book a book:Book ;
+        book:hasTitle ?title ;
+        book:hasAuthor ?author ;
+        book:hasReadingLevel ?levelInd .
+  ?levelInd a ?levelClass .
+  FILTER(?levelClass != book:ReadingLevel)
+  BIND(STRAFTER(STR(?levelClass), "#/") AS ?readingLevel)
+  FILTER(?readingLevel != "")
+}
+ORDER BY ?title
+
+
+# Query 2: Find all books recommended for each user
+SELECT ?userName ?bookTitle ?author
+WHERE {
+  ?user a book:User ;
+        book:hasName ?userName ;
+        book:recommendedBook ?book .
+  ?book book:hasTitle ?bookTitle ;
+        book:hasAuthor ?author .
+}
+ORDER BY ?userName
+
+
+# Query 3: Find books that match a user's preferred genre
+SELECT ?userName ?bookTitle ?genreName
+WHERE {
+  ?user a book:User ;
+        book:hasName ?userName ;
+        book:preferredGenre ?genreInd .
+  ?genreInd a ?genreClass .
+  ?book a book:Book ;
+        book:hasTitle ?bookTitle ;
+        book:hasGenre ?genreInd2 .
+  ?genreInd2 a ?genreClass .
+  FILTER(?genreClass != book:Genre)
+  BIND(STRAFTER(STR(?genreClass), "#/") AS ?genreName)
+  FILTER(?genreName != "")
+}
+ORDER BY ?userName ?bookTitle
+
+
+# Query 4: Count how many books belong to each genre
+SELECT ?genreName (COUNT(DISTINCT ?book) AS ?bookCount)
+WHERE {
+  ?genreInd a ?genreClass .
+  ?genreClass rdfs:subClassOf book:Genre .
+  ?book a book:Book ;
+        book:hasGenre ?genreInd .
+  FILTER(?genreClass != book:Genre)
+  BIND(STRAFTER(STR(?genreClass), "#/") AS ?genreName)
+  FILTER(?genreName != "")
+}
+GROUP BY ?genreName
+ORDER BY DESC(?bookCount)
+
+
+# Query 5: List all books for beginner or intermediate readers along with their genres
+SELECT ?title ?author ?readingLevel ?genreName
+WHERE {
+  ?book a book:Book ;
+        book:hasTitle ?title ;
+        book:hasAuthor ?author ;
+        book:hasReadingLevel ?levelInd ;
+        book:hasGenre ?genreInd .
+  ?levelInd a ?levelClass .
+  ?genreInd a ?genreClass .
+  FILTER(?levelClass IN (book:Beginner, book:Intermediate))
+  FILTER(?genreClass != book:Genre)
+  BIND(STRAFTER(STR(?levelClass), "#/") AS ?readingLevel)
+  BIND(STRAFTER(STR(?genreClass), "#/") AS ?genreName)
+  FILTER(?readingLevel != "")
+  FILTER(?genreName != "")
+}
+ORDER BY ?title ?genreName
