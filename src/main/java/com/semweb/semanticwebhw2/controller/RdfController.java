@@ -57,6 +57,7 @@ public class RdfController {
     @GetMapping("/books")
     public String listBooks(Model model) {
         model.addAttribute("books", rdfService.getAllBooks());
+        model.addAttribute("currentPage", "books");
         return "books";
     }
 
@@ -65,6 +66,7 @@ public class RdfController {
         Map<String, String> book = rdfService.getBookById(id);
         if (book == null) return "redirect:/books";
         model.addAttribute("book", book);
+        model.addAttribute("currentPage", "book-detail");
         return "book-detail";
     }
 
